@@ -134,8 +134,7 @@ function CategoryManagement() {
 
             <Box
                 sx={{
-                    p: 1,
-                    backgroundColor: 'WhiteSmoke',
+                    mt: 1
                 }}
             >
                 <Stack direction={"row"} spacing={1} sx={{
