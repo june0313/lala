@@ -9,7 +9,6 @@ import yj.project.lala.domain.category.CategoryGroup;
 import yj.project.lala.domain.category.CategoryRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,7 +35,7 @@ public class CategoryService {
         String refinedCategoryName = request.getName().trim();
 
         categoryRepository.findByName(refinedCategoryName).ifPresent(category -> {
-            throw new IllegalStateException(category.getName() + " 카테고리가 이미 존재합니다.");
+            throw new IllegalStateException(category.getName() + " 대분류가 이미 존재합니다.");
         });
 
         Category newCategory = new Category(CategoryGroup.valueOf(request.getCategoryGroup()), refinedCategoryName);

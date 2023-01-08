@@ -35,8 +35,12 @@ interface SubCategory {
 function CategoryManagement() {
     const [categories, setCategories] = useState<Category[]>([])
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
     const [newCategoryName, setNewCategoryName] = useState('');
     const [newCategoryNameError, setNewCategoryNameError] = useState(false);
+
+    const [newSubCategoryName, setNewSubCategoryName] = useState(new Map());
+
     const [snackBarOpen, setSnackBarOpen] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState('');
 
@@ -77,7 +81,6 @@ function CategoryManagement() {
             .then(() => axios.get("/api/v1/categories"))
             .then(response => setCategories(response.data))
             .catch(error => {
-                console.log(error.response.data);
                 setSnackBarMessage(error.response.data.detail)
                 setSnackBarOpen(true);
             })
@@ -86,7 +89,24 @@ function CategoryManagement() {
     }
 
     function addSubCategory(categoryId: number) {
-        console.log("add sub category to " + categoryId)
+        const subCategoryName = newSubCategoryName.get(categoryId) || '';
+
+        if (subCategoryName.length === 0) {
+            console.log("sub category name is empty.")
+            return;
+        }
+
+        axios.post("/api/v1/sub-categories", {
+            categoryId: categoryId,
+            name: subCategoryName
+        })
+            .then(() => axios.get("/api/v1/categories"))
+            .then(response => setCategories(response.data))
+            .then(() => setNewSubCategoryName(prev => new Map(prev).set(categoryId, '')))
+            .catch(error => {
+                setSnackBarMessage(error.response.data.detail)
+                setSnackBarOpen(true);
+            })
     }
 
     const onChangeTab = (event: React.SyntheticEvent, tabIndex: number) => {
@@ -99,6 +119,11 @@ function CategoryManagement() {
         e.preventDefault();
         setNewCategoryName(e.target.value);
         setNewCategoryNameError(false);
+    }
+
+    function onChangeNewSubCategoryName(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, categoryId: number) {
+        e.preventDefault();
+        setNewSubCategoryName(prev => new Map(prev).set(categoryId, e.target.value));
     }
 
     return (
@@ -118,11 +143,11 @@ function CategoryManagement() {
                     ml: 1
                 }}>
                     <Input placeholder={`새 대분류`}
-                               size={"small"}
-                               type={"text"}
-                               value={newCategoryName}
-                               onChange={onChangeNewCategoryName}
-                               error={newCategoryNameError}
+                           size={"small"}
+                           type={"text"}
+                           value={newCategoryName}
+                           onChange={onChangeNewCategoryName}
+                           error={newCategoryNameError}
                     />
                     <Button size={"small"}
                             startIcon={<AddCircle/>}
@@ -163,8 +188,13 @@ function CategoryManagement() {
                                                         )
                                                     )}
 
-                                                    <Input placeholder={`새 ${category.name} 소분류`} size={"small"}/>
-                                                    <Button size={"small"} startIcon={<AddCircle/>}
+                                                    <Input placeholder={`새 ${category.name} 소분류`}
+                                                           size={"small"}
+                                                           value={newSubCategoryName.get(category.categoryId) || ''}
+                                                           onChange={(e => onChangeNewSubCategoryName(e, category.categoryId))}
+                                                    />
+                                                    <Button size={"small"}
+                                                            startIcon={<AddCircle/>}
                                                             variant={"contained"}
                                                             onClick={() => addSubCategory(category.categoryId)}>
                                                         추가
@@ -187,7 +217,7 @@ function CategoryManagement() {
                     setSnackBarMessage('');
                 }}
             >
-                <Alert  severity="error" sx={{ width: '100%' }}>
+                <Alert severity="error" sx={{width: '100%'}}>
                     {snackBarMessage}
                 </Alert>
             </Snackbar>
