@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.1'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'com.github.node-gradle.node' version '3.5.1'
+}
+
+group = 'yj.project'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+node {
+    version = '16.16.0'
+    npmVersion = '8.11.0'
+
+    download = true
+
+    nodeProjectDir = file("${project.projectDir}/frontend")
+}
+
+task buildFrontend(type: NpmTask) {
+    args = ['run', 'build']
+}
+
+task copyFrontendBuild(type: Copy) {
+    dependsOn 'buildFrontend'
+    from "${project.projectDir}/frontend/build"
+    into "${project.projectDir}/src/main/resources/static"
+}
+
+processResources.dependsOn 'copyFrontendBuild'
