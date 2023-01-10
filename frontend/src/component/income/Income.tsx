@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import {
+    InputBase,
     Paper,
     Table,
     TableBody,
@@ -9,7 +10,6 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField,
     Typography
 } from "@mui/material";
 import axios from "axios";
@@ -24,6 +24,10 @@ interface IncomeInput {
     amount: number;
 }
 
+const tableCellBorderStyle = {
+    border: "1px solid rgba(224, 224, 224, 1)"
+}
+
 export default function Income() {
     const [incomeInput, setIncomeInput] = useState<IncomeInput[]>([])
 
@@ -32,15 +36,15 @@ export default function Income() {
             .then(r => setIncomeInput(r.data))
     }, [])
 
-    function onAmountChange(event:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>, index: number) {
+    function onAmountChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
 
         const newIncomeInput = [...incomeInput];
-        newIncomeInput[index].amount = Number(event.target.value.replace(/\D/g,''));
+        newIncomeInput[index].amount = Number(event.target.value.replace(/\D/g, ''));
         setIncomeInput(newIncomeInput);
     }
 
-    function onMemoChange(event:React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>, index: number) {
+    function onMemoChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
 
         const newIncomeInput = [...incomeInput];
@@ -53,42 +57,78 @@ export default function Income() {
             <Typography variant="h6" mt={1}>
                 수입
             </Typography>
+
             <TableContainer component={Paper}>
                 <Table size={'small'}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>대분류</TableCell>
-                            <TableCell>소분류</TableCell>
-                            <TableCell>메모</TableCell>
-                            <TableCell>금액</TableCell>
+                            <TableCell
+                                sx={tableCellBorderStyle}>대분류
+                            </TableCell>
+                            <TableCell
+                                sx={tableCellBorderStyle}>소분류
+                            </TableCell>
+                            <TableCell
+                                sx={tableCellBorderStyle}>메모
+                            </TableCell>
+                            <TableCell
+                                sx={tableCellBorderStyle}>금액
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-
                         {incomeInput.map((input, index) => {
                             return (
                                 <TableRow key={index}>
-                                    <TableCell>
+                                    <TableCell width={"20%"}
+                                               sx={tableCellBorderStyle}>
                                         {input.categoryName}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell
+                                        width={"20%"}
+                                        sx={tableCellBorderStyle}
+                                    >
                                         {input.subCategoryName}
                                     </TableCell>
-                                    <TableCell>
-                                        <TextField size={"small"} type={"text"} value={input.memo} onChange={(event) => onMemoChange(event, index)}></TextField>
+                                    <TableCell
+                                        sx={tableCellBorderStyle}
+                                    >
+                                        <InputBase
+                                            sx={{
+                                                input: {
+                                                    fontSize: "0.875rem",
+                                                    p: 0
+                                                }
+                                            }}
+                                            fullWidth
+                                            size={"small"}
+                                            type={"text"}
+                                            value={input.memo}
+                                            onChange={(event) => onMemoChange(event, index)}
+                                        />
                                     </TableCell>
-                                    <TableCell>
-                                        <TextField
-                                            sx={{input: {textAlign: "right"} }}
-                                            size={"small"} type={"text"} value={Number(input.amount).toLocaleString()} onChange={(event) => onAmountChange(event, index)}>
-                                        </TextField>
+                                    <TableCell width={"20%"}
+                                               sx={tableCellBorderStyle}>
+                                        <InputBase
+                                            fullWidth
+                                            sx={{
+                                                input: {
+                                                    textAlign: "right",
+                                                    fontSize: "0.875rem",
+                                                    p: 0
+                                                }
+                                            }}
+                                            size={"small"}
+                                            type={"text"}
+                                            value={Number(input.amount).toLocaleString()}
+                                            onChange={event => onAmountChange(event, index)}
+                                        />
                                     </TableCell>
                                 </TableRow>
                             )
                         })}
                     </TableBody>
                 </Table>
-
             </TableContainer>
         </Box>
     );
