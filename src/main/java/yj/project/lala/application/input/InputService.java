@@ -7,7 +7,6 @@ import yj.project.lala.domain.category.CategoryGroup;
 import yj.project.lala.domain.category.CategoryRepository;
 import yj.project.lala.domain.ledger.Ledger;
 import yj.project.lala.domain.ledger.LedgerRepository;
-import yj.project.lala.domain.ledger.LedgerType;
 import yj.project.lala.domain.subcategory.SubCategory;
 
 import java.util.List;
@@ -20,9 +19,9 @@ public class InputService {
     private final LedgerRepository ledgerRepository;
 
     @Transactional
-    public List<Input> getInputs() {
-        var categories = categoryRepository.findAllByCategoryGroup(CategoryGroup.INCOME);
-        var incomes = ledgerRepository.findAllByLedgerType(LedgerType.INCOME);
+    public List<Input> getInputs(CategoryGroup categoryGroup) {
+        var categories = categoryRepository.findAllByCategoryGroup(categoryGroup);
+        var incomes = ledgerRepository.findAllByCategoryIn(categories);
 
         return categories.stream()
                 .flatMap(category -> category.getSubCategories().stream())
