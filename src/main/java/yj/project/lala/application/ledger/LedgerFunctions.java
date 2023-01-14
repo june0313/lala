@@ -9,7 +9,6 @@ public class LedgerFunctions {
     public static Function<Ledger, LedgerView> toView = ledger -> {
         LedgerView view = new LedgerView();
         view.setId(ledger.getId());
-        view.setLedgerType(ledger.getLedgerType().getDisplayName());
         view.setCategoryName(ledger.getCategory().getName());
         view.setSubCategoryName(ledger.getSubCategory().getName());
         view.setMemo(ledger.getMemo());

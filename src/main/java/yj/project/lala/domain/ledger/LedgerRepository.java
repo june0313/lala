@@ -6,7 +6,5 @@ import yj.project.lala.domain.category.Category;
 import java.util.List;
 
 public interface LedgerRepository extends JpaRepository<Ledger, Long> {
-    List<Ledger> findAllByLedgerType(LedgerType type);
-
     List<Ledger> findAllByCategoryIn(List<Category> categoryIds);
 }

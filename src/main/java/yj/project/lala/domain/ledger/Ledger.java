@@ -14,14 +14,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Ledger {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "amount")
     private Long amount;
     @Column(name = "memo")
     private String memo;
-    @Column(name = "type")
-    @Enumerated(value = EnumType.STRING)
-    private LedgerType ledgerType;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -34,17 +32,24 @@ public class Ledger {
     private LocalDate date;
 
     public void updateMemo(String newMemo) {
-        if (memo == null) {
+        if (newMemo == null) {
             return;
         }
 
         this.memo = newMemo;
     }
 
-    public Ledger(Long amount, String memo, LedgerType ledgerType, Category category, SubCategory subCategory, LocalDate date) {
+    public void updateAmount(Long newAmount) {
+        if (newAmount == null) {
+            return;
+        }
+
+        this.amount = newAmount;
+    }
+
+    public Ledger(Long amount, String memo, Category category, SubCategory subCategory, LocalDate date) {
         this.amount = amount;
         this.memo = memo;
-        this.ledgerType = ledgerType;
         this.category = category;
         this.subCategory = subCategory;
         this.date = date;

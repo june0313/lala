@@ -47,27 +47,27 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
 }));
 
 export default function FixedLedgerInput(props: InputProps) {
-    const [ledgerInput, setLedgerInput] = useState<LedgerInput[]>([])
+    const [ledgerInputs, setLedgerInputs] = useState<LedgerInput[]>([])
 
     useEffect(() => {
         axios.get(props.api)
-            .then(r => setLedgerInput(r.data))
+            .then(r => setLedgerInputs(r.data))
     }, [])
 
     function onAmountChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
 
-        const newIncomeInput = [...ledgerInput];
+        const newIncomeInput = [...ledgerInputs];
         newIncomeInput[index].amount = Number(event.target.value.replace(/\D/g, ''));
-        setLedgerInput(newIncomeInput);
+        setLedgerInputs(newIncomeInput);
     }
 
     function onMemoChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
 
-        const newIncomeInput = [...ledgerInput];
+        const newIncomeInput = [...ledgerInputs];
         newIncomeInput[index].memo = event.target.value;
-        setLedgerInput(newIncomeInput);
+        setLedgerInputs(newIncomeInput);
     }
 
     function onFocus(event: React.FocusEvent<HTMLTableCellElement>) {
@@ -75,18 +75,21 @@ export default function FixedLedgerInput(props: InputProps) {
         event.currentTarget.style.backgroundColor = "#D0ECE7"
     }
 
-    function onBlur(event: React.FocusEvent<HTMLTableCellElement>, input: LedgerInput) {
+    function onBlur(event: React.FocusEvent<HTMLTableCellElement>, input: LedgerInput, index: number) {
         event.target.style.backgroundColor = "white"
         event.currentTarget.style.backgroundColor = "white"
 
-        if (input.ledgerId === null) {
-            console.log("TODO : create a new ledger...")
-        } else {
-            axios.put("/api/v1/ledgers", {
-                ledgerId: input.ledgerId,
-                memo: input.memo
-            }).then(r => console.log("updated" + r.data))
-        }
+        axios.post("/api/v1/ledgers", {
+            ledgerId: input.ledgerId,
+            categoryId: input.categoryId,
+            subCategoryId: input.subCategoryId,
+            memo: input.memo,
+            amount: input.amount
+        }).then(r => {
+            const newLedgerInputs = [...ledgerInputs];
+            newLedgerInputs[index].ledgerId = r.data.id;
+            setLedgerInputs(newLedgerInputs);
+        })
     }
 
     return (
@@ -106,7 +109,7 @@ export default function FixedLedgerInput(props: InputProps) {
                         </StyledTableHeaderRow>
                     </TableHead>
                     <TableBody>
-                        {ledgerInput.map((input, index) => {
+                        {ledgerInputs.map((input, index) => {
                             return (
                                 <TableRow key={index}>
                                     <StyledTableCell width={"20%"}>
@@ -121,7 +124,7 @@ export default function FixedLedgerInput(props: InputProps) {
                                     <StyledTableCell
 
                                         onFocus={(event) => onFocus(event)}
-                                        onBlur={(event) => onBlur(event, input)}
+                                        onBlur={(event) => onBlur(event, input, index)}
                                     >
                                         <InputBase
                                             sx={{
@@ -139,8 +142,8 @@ export default function FixedLedgerInput(props: InputProps) {
                                     </StyledTableCell>
                                     <StyledTableCell width={"15%"}
 
-                                               onFocus={(event) => onFocus(event)}
-                                               onBlur={(event) => onBlur(event, input)}
+                                                     onFocus={(event) => onFocus(event)}
+                                                     onBlur={(event) => onBlur(event, input, index)}
                                     >
                                         <InputBase
                                             fullWidth
