@@ -31,9 +31,9 @@ interface InputProps {
 }
 
 const StyledTableHeaderRow = styled(TableRow)(({theme}) => ({
-    backgroundColor: theme.palette.secondary.main,
     border: '1px solid',
-    borderColor: theme.palette.secondary.main,
+    borderColor: theme.palette.grey["600"],
+    backgroundColor: theme.palette.grey["600"],
 }));
 
 const StyledTableHeader = styled(TableCell)(({theme}) => ({
