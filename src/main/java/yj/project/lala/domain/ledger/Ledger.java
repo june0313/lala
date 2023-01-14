@@ -33,6 +33,14 @@ public class Ledger {
 
     private LocalDate date;
 
+    public void updateMemo(String newMemo) {
+        if (memo == null) {
+            return;
+        }
+
+        this.memo = newMemo;
+    }
+
     public Ledger(Long amount, String memo, LedgerType ledgerType, Category category, SubCategory subCategory, LocalDate date) {
         this.amount = amount;
         this.memo = memo;

@@ -1,12 +1,12 @@
 import {Grid, Paper, Stack, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
-import Income from "../income/Income";
+import FixedLedgerInput from "../input/FixedLedgerInput";
 import Report from "../report/Report";
 import React from "react";
 import {DatePicker} from "@mui/x-date-pickers";
 import moment, {Moment} from "moment";
 
-function Main() {
+export default function Main() {
     const [currentMoment, setCurrentMoment] = React.useState<Moment | null>(moment());
 
     return (
@@ -29,7 +29,10 @@ function Main() {
                                 renderInput={(params) => <TextField {...params} size={"small"}/>}
                             />
                         </Paper>
-                        <Income/>
+                        <FixedLedgerInput title="수입" api="/api/v1/input/income"/>
+                        <FixedLedgerInput title="저축, 투자" api="/api/v1/input/saving-investment"/>
+                        <FixedLedgerInput title="연금, 노후" api="/api/v1/input/pension"/>
+                        <FixedLedgerInput title="지출" api="/api/v1/input/expenses"/>
                     </Stack>
                 </Grid>
 
@@ -38,8 +41,5 @@ function Main() {
                 </Grid>
             </Grid>
         </Box>
-
     )
 }
-
-export default Main;

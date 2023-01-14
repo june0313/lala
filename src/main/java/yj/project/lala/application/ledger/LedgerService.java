@@ -12,6 +12,7 @@ import yj.project.lala.domain.subcategory.SubCategory;
 import yj.project.lala.domain.subcategory.SubCategoryRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +30,16 @@ public class LedgerService {
         Ledger ledger = new Ledger(request.getAmount(), request.getMemo(), request.getLedgerType(), category, subCategory, request.getDate());
 
         ledgerRepository.save(ledger);
+    }
+
+    @Transactional
+    public LedgerView update(LedgerUpdateRequest request) {
+        Ledger ledger = ledgerRepository.findById(request.getLedgerId())
+                .orElseThrow();
+
+        Optional.ofNullable(request.getMemo()).ifPresent(ledger::updateMemo);
+
+        return LedgerFunctions.toView.apply(ledger);
     }
 
     public List<LedgerView> findAll() {

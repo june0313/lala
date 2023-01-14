@@ -12,9 +12,10 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
+import {styled} from '@mui/material/styles';
 import axios from "axios";
 
-interface IncomeInput {
+interface LedgerInput {
     ledgerId?: number;
     categoryId: number;
     categoryName: string;
@@ -24,74 +25,103 @@ interface IncomeInput {
     amount: number;
 }
 
-const tableCellBorderStyle = {
-    border: "1px solid rgba(224, 224, 224, 1)"
+interface InputProps {
+    title: string;
+    api: string;
 }
 
-export default function Income() {
-    const [incomeInput, setIncomeInput] = useState<IncomeInput[]>([])
+const StyledTableHeaderRow = styled(TableRow)(({theme}) => ({
+    backgroundColor: theme.palette.secondary.main,
+    border: '1px solid',
+    borderColor: theme.palette.secondary.main,
+}));
+
+const StyledTableHeader = styled(TableCell)(({theme}) => ({
+    fontWeight: 'bold',
+    color: theme.palette.common.white,
+}));
+
+const StyledTableCell = styled(TableCell)(({theme}) => ({
+    border: "1px solid",
+    borderColor: theme.palette.grey["300"]
+}));
+
+export default function FixedLedgerInput(props: InputProps) {
+    const [ledgerInput, setLedgerInput] = useState<LedgerInput[]>([])
 
     useEffect(() => {
-        axios.get("/api/v1/input/income")
-            .then(r => setIncomeInput(r.data))
+        axios.get(props.api)
+            .then(r => setLedgerInput(r.data))
     }, [])
 
     function onAmountChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
 
-        const newIncomeInput = [...incomeInput];
+        const newIncomeInput = [...ledgerInput];
         newIncomeInput[index].amount = Number(event.target.value.replace(/\D/g, ''));
-        setIncomeInput(newIncomeInput);
+        setLedgerInput(newIncomeInput);
     }
 
     function onMemoChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
 
-        const newIncomeInput = [...incomeInput];
+        const newIncomeInput = [...ledgerInput];
         newIncomeInput[index].memo = event.target.value;
-        setIncomeInput(newIncomeInput);
+        setLedgerInput(newIncomeInput);
+    }
+
+    function onFocus(event: React.FocusEvent<HTMLTableCellElement>) {
+        event.target.style.backgroundColor = "#D0ECE7"
+        event.currentTarget.style.backgroundColor = "#D0ECE7"
+    }
+
+    function onBlur(event: React.FocusEvent<HTMLTableCellElement>, input: LedgerInput) {
+        event.target.style.backgroundColor = "white"
+        event.currentTarget.style.backgroundColor = "white"
+
+        if (input.ledgerId === null) {
+            console.log("TODO : create a new ledger...")
+        } else {
+            axios.put("/api/v1/ledgers", {
+                ledgerId: input.ledgerId,
+                memo: input.memo
+            }).then(r => console.log("updated" + r.data))
+        }
     }
 
     return (
         <Box>
-            <Typography variant="h6" mt={1}>
-                수입
+            <Typography variant="h6" mt={1} ml={1}>
+                {props.title}
             </Typography>
 
             <TableContainer component={Paper}>
                 <Table size={'small'}>
                     <TableHead>
-                        <TableRow>
-                            <TableCell
-                                sx={tableCellBorderStyle}>대분류
-                            </TableCell>
-                            <TableCell
-                                sx={tableCellBorderStyle}>소분류
-                            </TableCell>
-                            <TableCell
-                                sx={tableCellBorderStyle}>메모
-                            </TableCell>
-                            <TableCell
-                                sx={tableCellBorderStyle}>금액
-                            </TableCell>
-                        </TableRow>
+                        <StyledTableHeaderRow>
+                            <StyledTableHeader>대분류</StyledTableHeader>
+                            <StyledTableHeader>소분류</StyledTableHeader>
+                            <StyledTableHeader>메모</StyledTableHeader>
+                            <StyledTableHeader>금액</StyledTableHeader>
+                        </StyledTableHeaderRow>
                     </TableHead>
                     <TableBody>
-                        {incomeInput.map((input, index) => {
+                        {ledgerInput.map((input, index) => {
                             return (
                                 <TableRow key={index}>
-                                    <TableCell width={"20%"}
-                                               sx={tableCellBorderStyle}>
+                                    <StyledTableCell width={"20%"}>
                                         {input.categoryName}
-                                    </TableCell>
-                                    <TableCell
+                                    </StyledTableCell>
+                                    <StyledTableCell
                                         width={"20%"}
-                                        sx={tableCellBorderStyle}
+
                                     >
                                         {input.subCategoryName}
-                                    </TableCell>
-                                    <TableCell
-                                        sx={tableCellBorderStyle}
+                                    </StyledTableCell>
+                                    <StyledTableCell
+
+                                        onFocus={(event) => onFocus(event)}
+                                        onBlur={(event) => onBlur(event, input)}
                                     >
                                         <InputBase
                                             sx={{
@@ -106,9 +136,12 @@ export default function Income() {
                                             value={input.memo}
                                             onChange={(event) => onMemoChange(event, index)}
                                         />
-                                    </TableCell>
-                                    <TableCell width={"20%"}
-                                               sx={tableCellBorderStyle}>
+                                    </StyledTableCell>
+                                    <StyledTableCell width={"15%"}
+
+                                               onFocus={(event) => onFocus(event)}
+                                               onBlur={(event) => onBlur(event, input)}
+                                    >
                                         <InputBase
                                             fullWidth
                                             sx={{
@@ -123,7 +156,7 @@ export default function Income() {
                                             value={Number(input.amount).toLocaleString()}
                                             onChange={event => onAmountChange(event, index)}
                                         />
-                                    </TableCell>
+                                    </StyledTableCell>
                                 </TableRow>
                             )
                         })}
