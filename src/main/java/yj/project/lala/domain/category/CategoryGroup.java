@@ -9,7 +9,8 @@ public enum CategoryGroup {
     INCOME("수입"),
     SAVING_INVESTMENT("저축, 투자"),
     PENSION("연금, 노후"),
-    EXPENSES("지출"),
+    FIXED_EXPENSES("고정 지출"),
+    VARIABLE_EXPENSES("변동 지출"),
     ;
 
     private final String displayName;

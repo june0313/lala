@@ -32,7 +32,7 @@ export default function Main() {
                         <FixedLedgerInput title="수입" api="/api/v1/input/income"/>
                         <FixedLedgerInput title="저축, 투자" api="/api/v1/input/saving-investment"/>
                         <FixedLedgerInput title="연금, 노후" api="/api/v1/input/pension"/>
-                        <FixedLedgerInput title="지출" api="/api/v1/input/expenses"/>
+                        <FixedLedgerInput title="고정 지출" api="/api/v1/input/fixed-expenses"/>
                     </Stack>
                 </Grid>
 

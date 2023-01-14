@@ -58,8 +58,12 @@ function CategoryManagement() {
             categoryGroup: "PENSION"
         },
         {
-            tabName: "지출",
-            categoryGroup: "EXPENSES"
+            tabName: "고정 지출",
+            categoryGroup: "FIXED_EXPENSES"
+        },
+        {
+            tabName: "변동 지출",
+            categoryGroup: "VARIABLE_EXPENSES"
         },
     ];
 

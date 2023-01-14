@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yj.project.lala.application.input.Input;
-import yj.project.lala.application.input.InputService;
+import yj.project.lala.application.input.FixedInput;
+import yj.project.lala.application.input.FixedInputService;
 import yj.project.lala.domain.category.CategoryGroup;
 
 import java.util.List;
@@ -14,25 +14,25 @@ import java.util.List;
 @RequestMapping("/api/v1/input")
 @RequiredArgsConstructor
 public class InputController {
-    private final InputService inputService;
+    private final FixedInputService fixedInputService;
 
     @GetMapping("/income")
-    public List<Input> incomeInput() {
-        return inputService.getInputs(CategoryGroup.INCOME);
+    public List<FixedInput> incomeInput() {
+        return fixedInputService.getInputs(CategoryGroup.INCOME);
     }
 
     @GetMapping("/saving-investment")
-    public List<Input> savingInvestmentInput() {
-        return inputService.getInputs(CategoryGroup.SAVING_INVESTMENT);
+    public List<FixedInput> savingInvestmentInput() {
+        return fixedInputService.getInputs(CategoryGroup.SAVING_INVESTMENT);
     }
 
     @GetMapping("/pension")
-    public List<Input> pensionInput() {
-        return inputService.getInputs(CategoryGroup.PENSION);
+    public List<FixedInput> pensionInput() {
+        return fixedInputService.getInputs(CategoryGroup.PENSION);
     }
 
-    @GetMapping("/expenses")
-    public List<Input> expensesInput() {
-        return inputService.getInputs(CategoryGroup.EXPENSES);
+    @GetMapping("/fixed-expenses")
+    public List<FixedInput> expensesInput() {
+        return fixedInputService.getInputs(CategoryGroup.FIXED_EXPENSES);
     }
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Input {
+public class FixedInput {
     private Long ledgerId;
     private Long categoryId;
     private String categoryName;

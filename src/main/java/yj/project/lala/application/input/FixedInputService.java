@@ -14,22 +14,22 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class InputService {
+public class FixedInputService {
     private final CategoryRepository categoryRepository;
     private final LedgerRepository ledgerRepository;
 
     @Transactional
-    public List<Input> getInputs(CategoryGroup categoryGroup) {
+    public List<FixedInput> getInputs(CategoryGroup categoryGroup) {
         var categories = categoryRepository.findAllByCategoryGroup(categoryGroup);
-        var incomes = ledgerRepository.findAllByCategoryIn(categories);
+        var ledgers = ledgerRepository.findAllByCategoryIn(categories);
 
         return categories.stream()
                 .flatMap(category -> category.getSubCategories().stream())
-                .map(subCategory -> newInput(subCategory, incomes))
+                .map(subCategory -> newInput(subCategory, ledgers))
                 .toList();
     }
 
-    private Input newInput(SubCategory subCategory, List<Ledger> incomes) {
+    private FixedInput newInput(SubCategory subCategory, List<Ledger> incomes) {
 
         Optional<Ledger> matchingLedger = incomes.stream()
                 .filter(ledger -> ledger.getSubCategory().getId().equals(subCategory.getId()))
@@ -38,10 +38,10 @@ public class InputService {
         if (matchingLedger.isPresent()) {
             Ledger ledger1 = matchingLedger.get();
 
-            return new Input(ledger1.getId(), ledger1.getCategory().getId(), ledger1.getCategory().getName(), ledger1.getSubCategory().getId(), ledger1.getSubCategory().getName(), ledger1.getMemo(), ledger1.getAmount());
+            return new FixedInput(ledger1.getId(), ledger1.getCategory().getId(), ledger1.getCategory().getName(), ledger1.getSubCategory().getId(), ledger1.getSubCategory().getName(), ledger1.getMemo(), ledger1.getAmount());
         }
 
-        return new Input(
+        return new FixedInput(
                 null,
                 subCategory.getCategory().getId(),
                 subCategory.getCategory().getName(),
