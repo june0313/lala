@@ -14,15 +14,23 @@ type Ledger = {
     date: string
 }
 
-export default function Report() {
+interface ReportProps {
+    year: number;
+    month: number;
+}
+
+export default function Report(props: ReportProps) {
     const [rows, setRows] = useState<Ledger[]>([]);
 
     useEffect(() => {
-        axios.get("/api/v1/ledgers")
+        axios.get("/api/v1/ledgers", {
+            params: {
+                year: props.year,
+                month: props.month
+            }
+        })
             .then(r => setRows(r.data))
-    }, [])
-
-
+    }, [props])
 
     return (
         <Box>

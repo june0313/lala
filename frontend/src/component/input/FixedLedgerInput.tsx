@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import {styled} from '@mui/material/styles';
 import axios from "axios";
+import {Moment} from "moment";
 
 interface LedgerInput {
     ledgerId?: number;
@@ -28,6 +29,7 @@ interface LedgerInput {
 interface InputProps {
     title: string;
     api: string;
+    moment: Moment
 }
 
 const StyledTableHeaderRow = styled(TableRow)(({theme}) => ({
@@ -84,7 +86,8 @@ export default function FixedLedgerInput(props: InputProps) {
             categoryId: input.categoryId,
             subCategoryId: input.subCategoryId,
             memo: input.memo,
-            amount: input.amount
+            amount: input.amount,
+            date: props.moment.format("yyyy-MM-DD")
         }).then(r => {
             const newLedgerInputs = [...ledgerInputs];
             newLedgerInputs[index].ledgerId = r.data.id;

@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yj.project.lala.domain.category.Category;
 import yj.project.lala.domain.ledger.Ledger;
+import yj.project.lala.domain.ledger.LedgerQueryRepository;
 import yj.project.lala.domain.ledger.LedgerRepository;
 import yj.project.lala.domain.subcategory.SubCategory;
 import yj.project.lala.domain.subcategory.SubCategoryRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class LedgerService {
     private final LedgerRepository ledgerRepository;
+    private final LedgerQueryRepository ledgerQueryRepository;
     private final SubCategoryRepository subCategoryRepository;
 
     @Transactional
@@ -31,7 +32,7 @@ public class LedgerService {
     private LedgerView create(LedgerWriteRequest request) {
         SubCategory subCategory = subCategoryRepository.findById(request.getSubCategoryId()).orElseThrow();
         Category category = subCategory.getCategory();
-        Ledger ledger = new Ledger(request.getAmount(), request.getMemo(), category, subCategory, LocalDate.now());
+        Ledger ledger = new Ledger(request.getAmount(), request.getMemo(), category, subCategory, request.getDate());
         ledgerRepository.save(ledger);
         return LedgerFunctions.toView.apply(ledger);
     }
@@ -43,8 +44,8 @@ public class LedgerService {
         return LedgerFunctions.toView.apply(ledger);
     }
 
-    public List<LedgerView> findAll() {
-        return ledgerRepository.findAll()
+    public List<LedgerView> findAll(int year, int month) {
+        return ledgerQueryRepository.find(year, month)
                 .stream()
                 .map(LedgerFunctions.toView)
                 .toList();

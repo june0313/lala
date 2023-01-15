@@ -7,7 +7,7 @@ import {DatePicker} from "@mui/x-date-pickers";
 import moment, {Moment} from "moment";
 
 export default function Main() {
-    const [currentMoment, setCurrentMoment] = React.useState<Moment | null>(moment());
+    const [currentMoment, setCurrentMoment] = React.useState<Moment>(moment());
 
     return (
         <Box>
@@ -22,22 +22,24 @@ export default function Main() {
                                 views={['year', 'month']}
                                 value={currentMoment}
                                 openTo="month"
-                                onChange={(newValue) => {
-                                    setCurrentMoment(newValue);
-                                }}
                                 inputFormat={"yyyy-MM"}
+                                onChange={(newValue) => {
+                                    if (newValue !== null) {
+                                        setCurrentMoment(newValue);
+                                    }
+                                }}
                                 renderInput={(params) => <TextField {...params} size={"small"}/>}
                             />
                         </Paper>
-                        <FixedLedgerInput title="수입" api="/api/v1/input/income"/>
-                        <FixedLedgerInput title="저축, 투자" api="/api/v1/input/saving-investment"/>
-                        <FixedLedgerInput title="연금, 노후" api="/api/v1/input/pension"/>
-                        <FixedLedgerInput title="고정 지출" api="/api/v1/input/fixed-expenses"/>
+                        <FixedLedgerInput title="수입" api="/api/v1/input/income" moment={currentMoment}/>
+                        <FixedLedgerInput title="저축, 투자" api="/api/v1/input/saving-investment" moment={currentMoment}/>
+                        <FixedLedgerInput title="연금, 노후" api="/api/v1/input/pension" moment={currentMoment}/>
+                        <FixedLedgerInput title="고정 지출" api="/api/v1/input/fixed-expenses" moment={currentMoment}/>
                     </Stack>
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Report/>
+                    <Report year={currentMoment.year()} month={currentMoment.month() + 1} />
                 </Grid>
             </Grid>
         </Box>

@@ -16,8 +16,8 @@ public class LedgerController {
     private final LedgerService ledgerService;
 
     @GetMapping
-    public List<LedgerView> findAllLedgers() {
-        return ledgerService.findAll();
+    public List<LedgerView> findAllLedgers(@RequestParam int year, @RequestParam int month) {
+        return ledgerService.findAll(year, month);
     }
 
     @PostMapping
