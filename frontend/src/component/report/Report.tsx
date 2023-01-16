@@ -3,16 +3,7 @@ import {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import axios from "axios";
-
-type Ledger = {
-    id: number,
-    amount: number,
-    memo: string,
-    ledgerType: string,
-    categoryName: string,
-    subCategoryName: string,
-    date: string
-}
+import Ledger from "../../model/Ledger";
 
 interface ReportProps {
     year: number;

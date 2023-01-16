@@ -1,20 +1,10 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
-import {
-    InputBase,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography
-} from "@mui/material";
-import {styled} from '@mui/material/styles';
+import {InputBase, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import axios from "axios";
 import {Moment} from "moment";
+import {StyledTableCell, StyledTableHeader, StyledTableHeaderRow} from '../custom/Tables';
 
 interface LedgerInput {
     ledgerId?: number;
@@ -31,22 +21,6 @@ interface InputProps {
     api: string;
     moment: Moment
 }
-
-const StyledTableHeaderRow = styled(TableRow)(({theme}) => ({
-    border: '1px solid',
-    borderColor: theme.palette.grey["600"],
-    backgroundColor: theme.palette.grey["600"],
-}));
-
-const StyledTableHeader = styled(TableCell)(({theme}) => ({
-    fontWeight: 'bold',
-    color: theme.palette.common.white,
-}));
-
-const StyledTableCell = styled(TableCell)(({theme}) => ({
-    border: "1px solid",
-    borderColor: theme.palette.grey["300"]
-}));
 
 export default function FixedLedgerInput(props: InputProps) {
     const [ledgerInputs, setLedgerInputs] = useState<LedgerInput[]>([])
@@ -118,14 +92,10 @@ export default function FixedLedgerInput(props: InputProps) {
                                     <StyledTableCell width={"20%"}>
                                         {input.categoryName}
                                     </StyledTableCell>
-                                    <StyledTableCell
-                                        width={"20%"}
-
-                                    >
+                                    <StyledTableCell width={"20%"}>
                                         {input.subCategoryName}
                                     </StyledTableCell>
                                     <StyledTableCell
-
                                         onFocus={(event) => onFocus(event)}
                                         onBlur={(event) => onBlur(event, input, index)}
                                     >
@@ -144,7 +114,6 @@ export default function FixedLedgerInput(props: InputProps) {
                                         />
                                     </StyledTableCell>
                                     <StyledTableCell width={"15%"}
-
                                                      onFocus={(event) => onFocus(event)}
                                                      onBlur={(event) => onBlur(event, input, index)}
                                     >

@@ -31,8 +31,8 @@ public class InputController {
         return fixedInputService.getInputs(CategoryGroup.PENSION);
     }
 
-    @GetMapping("/fixed-expenses")
+    @GetMapping("/expenses")
     public List<FixedInput> expensesInput() {
-        return fixedInputService.getInputs(CategoryGroup.FIXED_EXPENSES);
+        return fixedInputService.getInputs(CategoryGroup.EXPENSES);
     }
 }

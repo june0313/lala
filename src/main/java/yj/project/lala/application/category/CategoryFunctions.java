@@ -15,6 +15,7 @@ public class CategoryFunctions {
                         .map(s -> {
                             SubCategoryView subCategoryView = new SubCategoryView();
                             subCategoryView.setSubCategoryId(s.getId());
+                            subCategoryView.setFixed(s.isFixed());
                             subCategoryView.setName(s.getName());
                             return subCategoryView;
                         })

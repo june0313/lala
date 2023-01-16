@@ -4,31 +4,30 @@ import {
     Alert,
     Box,
     Button,
-    Chip,
+    IconButton,
     Input,
     Paper,
     Snackbar,
     Stack,
     Tab,
-    Table,
-    TableBody,
+    Table, TableBody,
     TableCell,
-    TableContainer,
-    TableHead,
+    TableContainer, TableHead,
     TableRow,
     Tabs
 } from "@mui/material";
-import {AddCircle} from "@mui/icons-material";
+import {AddCircle, PushPin, RemoveCircle} from "@mui/icons-material";
 
 interface Category {
-    categoryId: number,
-    group: string,
+    categoryId: number
+    group: string
     name: string
     subCategories: SubCategory[]
 }
 
 interface SubCategory {
-    subCategoryId: number,
+    subCategoryId: number
+    fixed: boolean
     name: string
 }
 
@@ -58,13 +57,9 @@ function CategoryManagement() {
             categoryGroup: "PENSION"
         },
         {
-            tabName: "고정 지출",
-            categoryGroup: "FIXED_EXPENSES"
-        },
-        {
-            tabName: "변동 지출",
-            categoryGroup: "VARIABLE_EXPENSES"
-        },
+            tabName: "지출",
+            categoryGroup: "EXPENSES"
+        }
     ];
 
     useEffect(() => {
@@ -111,6 +106,15 @@ function CategoryManagement() {
                 setSnackBarMessage(error.response.data.detail)
                 setSnackBarOpen(true);
             })
+    }
+
+    function updateSubCategory(subCategory: SubCategory) {
+        axios.put("/api/v1/sub-categories", {
+            subCategoryId: subCategory.subCategoryId,
+            fixed: !subCategory.fixed
+        })
+            .then(() => axios.get("/api/v1/categories"))
+            .then(response => setCategories(response.data))
     }
 
     const onChangeTab = (event: React.SyntheticEvent, tabIndex: number) => {
@@ -161,55 +165,83 @@ function CategoryManagement() {
                     </Button>
                 </Stack>
 
-                <TableContainer component={Paper} elevation={1}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell component="th">대분류</TableCell>
-                                <TableCell component="th">소분류</TableCell>
-                            </TableRow>
-                        </TableHead>
+                <Box sx={{
+                    display: "flex"
+                }}>
 
-                        <TableBody>
-                            {categories
-                                .filter(category => category.group === tabData[currentTabIndex].categoryGroup)
-                                .map(category =>
-                                    (
-                                        <TableRow key={category.categoryId}>
-                                            <TableCell>
-                                                {category.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                <Stack direction={"row"} spacing={1}>
-                                                    {category.subCategories.map(subCategory =>
-                                                        (
-                                                            <Chip key={subCategory.subCategoryId}
-                                                                  label={subCategory.name}
-                                                                  onClick={() => console.log("on click chip")}
-                                                                  onDelete={() => console.log("on delete chip")}
+                    <Stack direction={"row"} spacing={1} sx={{
+                        mb: 1
+                    }}>
+                        {categories
+                            .filter(category => category.group === tabData[currentTabIndex].categoryGroup)
+                            .map(category => (
+                                    <Box
+                                        key={category.categoryId}
+                                        sx={{
+                                        flexGrow: 0
+                                    }}>
+                                        <TableContainer component={Paper} elevation={1}>
+                                            <Table size={"small"}>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell colSpan={2} component="th" align={"center"}>
+                                                            {category.name}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+
+                                                <TableBody>
+                                                    {category.subCategories.map(subCategory => (
+                                                        <TableRow key={subCategory.subCategoryId}>
+                                                            <TableCell>
+                                                                {subCategory.name}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <Stack direction={"row"}>
+                                                                    <IconButton size={"small"}
+                                                                                color={subCategory.fixed ? "success" : undefined}
+                                                                                onClick={() => updateSubCategory(subCategory)}
+                                                                    >
+                                                                        <PushPin/>
+                                                                    </IconButton>
+
+                                                                    <IconButton color="error"
+                                                                                size={"small"}>
+                                                                        <RemoveCircle/>
+                                                                    </IconButton>
+                                                                </Stack>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            <Input placeholder={'새 소분류...'}
+                                                                   size={"small"}
+                                                                   value={newSubCategoryName.get(category.categoryId) || ''}
+                                                                   onChange={(e => onChangeNewSubCategoryName(e, category.categoryId))}
                                                             />
-                                                        )
-                                                    )}
-
-                                                    <Input placeholder={`새 ${category.name} 소분류`}
-                                                           size={"small"}
-                                                           value={newSubCategoryName.get(category.categoryId) || ''}
-                                                           onChange={(e => onChangeNewSubCategoryName(e, category.categoryId))}
-                                                    />
-                                                    <Button size={"small"}
-                                                            startIcon={<AddCircle/>}
-                                                            variant={"contained"}
-                                                            onClick={() => addSubCategory(category.categoryId)}>
-                                                        추가
-                                                    </Button>
-                                                </Stack>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Button size={"small"}
+                                                                    startIcon={<AddCircle/>}
+                                                                    variant={"contained"}
+                                                                    color={"primary"}
+                                                                    onClick={() => addSubCategory(category.categoryId)}
+                                                            >
+                                                                추가
+                                                            </Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
+                                )
+                            )
+                        }
+                    </Stack>
+                </Box>
             </Box>
 
             <Snackbar
@@ -220,7 +252,7 @@ function CategoryManagement() {
                     setSnackBarMessage('');
                 }}
             >
-                <Alert severity="error" sx={{width: '100%'}}>
+                <Alert severity="error" sx={{width: '100%'}} variant={"filled"}>
                     {snackBarMessage}
                 </Alert>
             </Snackbar>

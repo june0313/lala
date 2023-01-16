@@ -30,4 +30,14 @@ public class SubCategoryService {
         subCategoryRepository.save(subCategory);
         return subCategory.getId();
     }
+
+    @Transactional
+    public Long updateSubCategory(SubCategoryUpdateRequest request) {
+        SubCategory subCategory = subCategoryRepository.findById(request.getSubCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("소분류가 존재하지 않습니다. subCategory ID : " + request.getSubCategoryId()));
+
+        subCategory.changeFixingState(request.isFixed());
+
+        return subCategory.getId();
+    }
 }

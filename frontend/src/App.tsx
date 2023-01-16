@@ -20,7 +20,7 @@ const drawerWidth = 240;
 function App() {
     return (
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={"ko"}>
-            <Box sx={{display: 'flex', height: "100%"}}>
+            <Box sx={{display: 'flex', height: "100%", overflow: "auto"}}>
                 <CssBaseline/>
                 <LalaAppBar/>
                 <Drawer open
@@ -60,7 +60,7 @@ function App() {
 
                 <Box
                     component="main"
-                    sx={{flexGrow: 1, backgroundColor: 'whitesmoke', p: 1, height: '100%'}}
+                    sx={{flexGrow: 1, backgroundColor: 'whitesmoke', p: 1, height: '100%', overflow: "auto"}}
                 >
                     <Toolbar variant={"dense"}/>
                     <BrowserRouter>

@@ -15,6 +15,8 @@ public class SubCategory {
     private Long id;
     private String name;
 
+    private boolean fixed;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -22,5 +24,9 @@ public class SubCategory {
     public SubCategory(String name, Category category) {
         this.name = name;
         this.category = category;
+    }
+
+    public void changeFixingState(boolean fixed) {
+        this.fixed = fixed;
     }
 }

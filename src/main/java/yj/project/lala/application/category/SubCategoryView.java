@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class SubCategoryView {
     private Long subCategoryId;
+    private boolean fixed;
     private String name;
 }
