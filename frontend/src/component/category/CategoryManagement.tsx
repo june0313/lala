@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
+import {Category, CategoryApi, SubCategory} from "../../api/CategoryApi";
 import {
     Alert,
     Box,
@@ -10,26 +10,15 @@ import {
     Snackbar,
     Stack,
     Tab,
-    Table, TableBody,
+    Table,
+    TableBody,
     TableCell,
-    TableContainer, TableHead,
+    TableContainer,
+    TableHead,
     TableRow,
     Tabs
 } from "@mui/material";
 import {AddCircle, PushPin, RemoveCircle} from "@mui/icons-material";
-
-interface Category {
-    categoryId: number
-    group: string
-    name: string
-    subCategories: SubCategory[]
-}
-
-interface SubCategory {
-    subCategoryId: number
-    fixed: boolean
-    name: string
-}
 
 function CategoryManagement() {
     const [categories, setCategories] = useState<Category[]>([])
@@ -63,8 +52,8 @@ function CategoryManagement() {
     ];
 
     useEffect(() => {
-        axios.get("/api/v1/categories")
-            .then(r => setCategories(r.data))
+        CategoryApi.getAllCategories()
+            .then(categories => setCategories(categories))
     }, [])
 
     function addCategory(name: string, group: string) {
@@ -73,18 +62,14 @@ function CategoryManagement() {
             return;
         }
 
-        axios.post("/api/v1/categories", {
-            name: name,
-            categoryGroup: group
-        })
-            .then(() => axios.get("/api/v1/categories"))
-            .then(response => setCategories(response.data))
+        CategoryApi.addCategory(name, group)
+            .then(() => CategoryApi.getAllCategories())
+            .then(categories => setCategories(categories))
             .catch(error => {
                 setSnackBarMessage(error.response.data.detail)
                 setSnackBarOpen(true);
             })
             .finally(() => setNewCategoryName(''))
-
     }
 
     function addSubCategory(categoryId: number) {
@@ -95,12 +80,9 @@ function CategoryManagement() {
             return;
         }
 
-        axios.post("/api/v1/sub-categories", {
-            categoryId: categoryId,
-            name: subCategoryName
-        })
-            .then(() => axios.get("/api/v1/categories"))
-            .then(response => setCategories(response.data))
+        CategoryApi.addSubCategory(categoryId, subCategoryName)
+            .then(() => CategoryApi.getAllCategories())
+            .then(categories => setCategories(categories))
             .then(() => setNewSubCategoryName(prev => new Map(prev).set(categoryId, '')))
             .catch(error => {
                 setSnackBarMessage(error.response.data.detail)
@@ -109,12 +91,9 @@ function CategoryManagement() {
     }
 
     function updateSubCategory(subCategory: SubCategory) {
-        axios.put("/api/v1/sub-categories", {
-            subCategoryId: subCategory.subCategoryId,
-            fixed: !subCategory.fixed
-        })
-            .then(() => axios.get("/api/v1/categories"))
-            .then(response => setCategories(response.data))
+        CategoryApi.updateSubCategory(subCategory.subCategoryId, !subCategory.fixed)
+            .then(() => CategoryApi.getAllCategories())
+            .then(categories => setCategories(categories))
     }
 
     const onChangeTab = (event: React.SyntheticEvent, tabIndex: number) => {
