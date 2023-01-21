@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import {InputBase, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import axios from "axios";
-import {Moment} from "moment";
 import {StyledTableCell, StyledTableHeader, StyledTableHeaderRow} from '../custom/Tables';
 
 interface LedgerInput {
@@ -19,16 +18,25 @@ interface LedgerInput {
 interface InputProps {
     title: string;
     api: string;
-    moment: Moment
+    year: number;
+    month: number;
+    onChange: () => void
 }
 
 export default function FixedLedgerInput(props: InputProps) {
     const [ledgerInputs, setLedgerInputs] = useState<LedgerInput[]>([])
+    const [cache, setCache] = useState('');
 
     useEffect(() => {
-        axios.get(props.api)
+        axios
+            .get(props.api, {
+                params: {
+                    year: props.year,
+                    month: props.month
+                }
+            })
             .then(r => setLedgerInputs(r.data))
-    }, [])
+    }, [props])
 
     function onAmountChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         event.preventDefault();
@@ -43,30 +51,40 @@ export default function FixedLedgerInput(props: InputProps) {
 
         const newIncomeInput = [...ledgerInputs];
         newIncomeInput[index].memo = event.target.value;
-        setLedgerInputs(newIncomeInput);
+        setLedgerInputs(newIncomeInput)
     }
 
-    function onFocus(event: React.FocusEvent<HTMLTableCellElement>) {
+    function onFocus(event: React.FocusEvent<HTMLTableCellElement>, input: LedgerInput) {
         event.target.style.backgroundColor = "#D0ECE7"
         event.currentTarget.style.backgroundColor = "#D0ECE7"
+
+        setCache(JSON.stringify(input))
     }
 
     function onBlur(event: React.FocusEvent<HTMLTableCellElement>, input: LedgerInput, index: number) {
         event.target.style.backgroundColor = "white"
         event.currentTarget.style.backgroundColor = "white"
 
-        axios.post("/api/v1/ledgers", {
-            ledgerId: input.ledgerId,
-            categoryId: input.categoryId,
-            subCategoryId: input.subCategoryId,
-            memo: input.memo,
-            amount: input.amount,
-            date: props.moment.format("yyyy-MM-DD")
-        }).then(r => {
-            const newLedgerInputs = [...ledgerInputs];
-            newLedgerInputs[index].ledgerId = r.data.id;
-            setLedgerInputs(newLedgerInputs);
-        })
+        if (cache != JSON.stringify(input)) {
+            axios
+                .post("/api/v1/ledgers", {
+                    ledgerId: input.ledgerId,
+                    categoryId: input.categoryId,
+                    subCategoryId: input.subCategoryId,
+                    memo: input.memo,
+                    amount: input.amount,
+                    year: props.year,
+                    month: props.month,
+                })
+                .then(r => {
+                    const newLedgerInputs = [...ledgerInputs];
+                    newLedgerInputs[index].ledgerId = r.data.id;
+                    setLedgerInputs(newLedgerInputs);
+                })
+                .then(() => props.onChange())
+        }
+
+        setCache('')
     }
 
     return (
@@ -96,7 +114,7 @@ export default function FixedLedgerInput(props: InputProps) {
                                         {input.subCategoryName}
                                     </StyledTableCell>
                                     <StyledTableCell
-                                        onFocus={(event) => onFocus(event)}
+                                        onFocus={(event) => onFocus(event, input)}
                                         onBlur={(event) => onBlur(event, input, index)}
                                     >
                                         <InputBase
@@ -114,7 +132,7 @@ export default function FixedLedgerInput(props: InputProps) {
                                         />
                                     </StyledTableCell>
                                     <StyledTableCell width={"15%"}
-                                                     onFocus={(event) => onFocus(event)}
+                                                     onFocus={(event) => onFocus(event, input)}
                                                      onBlur={(event) => onBlur(event, input, index)}
                                     >
                                         <InputBase

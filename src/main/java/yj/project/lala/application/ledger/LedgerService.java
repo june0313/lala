@@ -32,7 +32,8 @@ public class LedgerService {
     private LedgerView create(LedgerWriteRequest request) {
         SubCategory subCategory = subCategoryRepository.findById(request.getSubCategoryId()).orElseThrow();
         Category category = subCategory.getCategory();
-        Ledger ledger = new Ledger(request.getAmount(), request.getMemo(), category, subCategory, request.getDate());
+        Ledger ledger = new Ledger(request.getAmount(), request.getMemo(), category, subCategory, request.getYear(), request.getMonth(), request.getDay());
+
         ledgerRepository.save(ledger);
         return LedgerFunctions.toView.apply(ledger);
     }

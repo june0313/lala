@@ -1,26 +1,15 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import Box from "@mui/material/Box";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import axios from "axios";
 import Ledger from "../../model/Ledger";
 
 interface ReportProps {
-    year: number;
-    month: number;
+    rows: Ledger[]
 }
 
 export default function Report(props: ReportProps) {
-    const [rows, setRows] = useState<Ledger[]>([]);
-
     useEffect(() => {
-        axios.get("/api/v1/ledgers", {
-            params: {
-                year: props.year,
-                month: props.month
-            }
-        })
-            .then(r => setRows(r.data))
     }, [props])
 
     return (
@@ -31,16 +20,14 @@ export default function Report(props: ReportProps) {
                         <TableRow>
                             <TableCell>대분류</TableCell>
                             <TableCell>소분류</TableCell>
-                            <TableCell>메모</TableCell>
                             <TableCell>금액</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map(row => (
-                            <TableRow key = {row.id}>
+                        {props.rows.map(row => (
+                            <TableRow key={row.id}>
                                 <TableCell>{row.categoryName}</TableCell>
                                 <TableCell>{row.subCategoryName}</TableCell>
-                                <TableCell>{row.memo}</TableCell>
                                 <TableCell>{row.amount.toLocaleString()}</TableCell>
                             </TableRow>
                         ))}

@@ -1,10 +1,10 @@
 package yj.project.lala.domain.ledger;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import yj.project.lala.domain.category.Category;
+import yj.project.lala.domain.subcategory.SubCategory;
 
 import java.util.List;
 
@@ -18,7 +18,10 @@ public class LedgerQueryRepository {
     public List<Ledger> find(int year, int month) {
         return jpaQueryFactory
                 .selectFrom(ledger)
-                .where(yearAndMonthEq(year, month))
+                .where(
+                        ledger.year.eq(year),
+                        ledger.month.eq(month)
+                )
                 .fetch();
     }
 
@@ -26,14 +29,22 @@ public class LedgerQueryRepository {
         return jpaQueryFactory
                 .selectFrom(ledger)
                 .where(
-                        yearAndMonthEq(year, month),
+                        ledger.year.eq(year),
+                        ledger.month.eq(month),
                         ledger.category.in(categories)
                 )
                 .fetch();
     }
 
-    private BooleanExpression yearAndMonthEq(int year, int month) {
-        return ledger.date.year().eq(year)
-                .and(ledger.date.month().eq(month));
+    public List<Ledger> findWithSubCategories(int year, int month, List<SubCategory> subCategories) {
+        return jpaQueryFactory
+                .selectFrom(ledger)
+                .where(
+                        ledger.year.eq(year),
+                        ledger.month.eq(month),
+                        ledger.subCategory.in(subCategories)
+                )
+                .fetch();
     }
+
 }

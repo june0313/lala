@@ -13,7 +13,7 @@ public class LedgerFunctions {
         view.setSubCategoryName(ledger.getSubCategory().getName());
         view.setMemo(ledger.getMemo());
         view.setAmount(ledger.getAmount());
-        view.setDate(ledger.getDate());
+
         return view;
     };
 }

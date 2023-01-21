@@ -22,14 +22,21 @@ public class Ledger {
     private String memo;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "sub_category_id")
+    @JoinColumn(name = "sub_category_id", nullable = false)
     private SubCategory subCategory;
 
-    private LocalDate date;
+    @Column(name = "year", nullable = false)
+    private Integer year;
+
+    @Column(name = "month", nullable = false)
+    private Integer month;
+
+    @Column(name = "day")
+    private Integer day;
 
     public void updateMemo(String newMemo) {
         if (newMemo == null) {
@@ -47,11 +54,13 @@ public class Ledger {
         this.amount = newAmount;
     }
 
-    public Ledger(Long amount, String memo, Category category, SubCategory subCategory, LocalDate date) {
+    public Ledger(Long amount, String memo, Category category, SubCategory subCategory, Integer year, Integer month, Integer day) {
         this.amount = amount;
         this.memo = memo;
         this.category = category;
         this.subCategory = subCategory;
-        this.date = date;
+        this.year = year;
+        this.month = month;
+        this.day = day;
     }
 }
