@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yj.project.lala.domain.category.Category;
 import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryQueryRepository;
 import yj.project.lala.domain.category.CategoryRepository;
+import yj.project.lala.domain.subcategory.SubCategory;
+import yj.project.lala.domain.subcategory.SubCategoryRepository;
 
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryQueryRepository categoryQueryRepository;
 
     public List<CategoryView> findAll() {
 
@@ -26,6 +30,13 @@ public class CategoryService {
 
     public List<CategoryView> findByGroup(CategoryGroup group) {
         return categoryRepository.findAllByCategoryGroup(group).stream()
+                .filter(category -> !category.getSubCategories().isEmpty())
+                .map(CategoryFunctions.toView)
+                .toList();
+    }
+
+    public List<CategoryView> findVariableExpensesCategory() {
+        return categoryQueryRepository.findVariableExpensesCategories().stream()
                 .map(CategoryFunctions.toView)
                 .toList();
     }

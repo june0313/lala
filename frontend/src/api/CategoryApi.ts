@@ -22,6 +22,11 @@ export class CategoryApi {
         return response.data;
     }
 
+    static async getExpensesCategories(): Promise<Category[]> {
+        const response = await axios.get<Category[]>(CATEGORY_API_PATH + "/expenses");
+        return response.data;
+    }
+
     static async addCategory(name: string, group: string): Promise<number> {
         const response = await axios.post<number>(CATEGORY_API_PATH, {
             name: name,

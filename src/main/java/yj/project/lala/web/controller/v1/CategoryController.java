@@ -25,6 +25,11 @@ public class CategoryController {
         return categoryService.findByGroup(CategoryGroup.INCOME);
     }
 
+    @GetMapping("/expenses")
+    public List<CategoryView> findExpensesCategories() {
+        return categoryService.findVariableExpensesCategory();
+    }
+
     @PostMapping
     public Long addNewCategory(@RequestBody CategoryAddRequest request) {
        return categoryService.addCategory(request);

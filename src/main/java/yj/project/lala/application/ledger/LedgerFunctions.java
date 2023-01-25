@@ -6,14 +6,17 @@ import java.util.function.Function;
 
 public class LedgerFunctions {
 
-    public static Function<Ledger, LedgerView> toView = ledger -> {
-        LedgerView view = new LedgerView();
-        view.setId(ledger.getId());
-        view.setCategoryName(ledger.getCategory().getName());
-        view.setSubCategoryName(ledger.getSubCategory().getName());
-        view.setMemo(ledger.getMemo());
-        view.setAmount(ledger.getAmount());
-
-        return view;
-    };
+    public static Function<Ledger, LedgerView> toView = ledger -> new LedgerView(
+            ledger.getId(),
+            ledger.getAmount(),
+            ledger.getMemo(),
+            ledger.getCategory().getId(),
+            ledger.getCategory().getName(),
+            ledger.getSubCategory().getId(),
+            ledger.getSubCategory().getName(),
+            ledger.getYear(),
+            ledger.getMonth(),
+            ledger.getDay(),
+            ""
+    );
 }

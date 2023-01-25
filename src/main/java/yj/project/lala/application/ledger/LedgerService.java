@@ -22,7 +22,7 @@ public class LedgerService {
 
     @Transactional
     public LedgerView write(LedgerWriteRequest request) {
-        if (request.getLedgerId() == null) {
+        if (request.getId() == null) {
             return create(request);
         } else {
             return update(request);
@@ -39,9 +39,15 @@ public class LedgerService {
     }
 
     private LedgerView update(LedgerWriteRequest request) {
-        Ledger ledger = ledgerRepository.findById(request.getLedgerId()).orElseThrow();
+        Ledger ledger = ledgerRepository.findById(request.getId()).orElseThrow();
         Optional.ofNullable(request.getMemo()).ifPresent(ledger::updateMemo);
         Optional.ofNullable(request.getAmount()).ifPresent(ledger::updateAmount);
+        Optional.ofNullable(request.getDay()).ifPresent(ledger::updateDay);
+
+        Optional.ofNullable(request.getSubCategoryId())
+                .flatMap(subCategoryRepository::findById)
+                .ifPresent(ledger::updateSubCategory);
+
         return LedgerFunctions.toView.apply(ledger);
     }
 

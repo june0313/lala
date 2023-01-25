@@ -4,8 +4,9 @@ import Report from "../report/Report";
 import React, {useEffect, useState} from "react";
 import {DatePicker} from "@mui/x-date-pickers";
 import moment, {Moment} from "moment";
-import Ledger from "../../model/Ledger";
 import axios from "axios";
+import VariableExpensesInput from "../input/VariableExpensesInput";
+import {Ledger} from "../../api/LedgerApi";
 
 export default function Main() {
     const [currentMoment, setCurrentMoment] = React.useState<Moment>(moment());
@@ -78,6 +79,8 @@ export default function Main() {
                                       month={getCurrentMonth()}
                                       onChange={() => fetchRows()}
                     />
+                    <VariableExpensesInput year={getCurrentYear()}
+                                           month={getCurrentMonth()}/>
                 </Stack>
             </Grid>
 

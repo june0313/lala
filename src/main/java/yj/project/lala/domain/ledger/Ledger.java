@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import yj.project.lala.domain.category.Category;
 import yj.project.lala.domain.subcategory.SubCategory;
 
-import java.time.LocalDate;
-
 @Entity
 @Getter
 @Table(name = "ledger")
@@ -52,6 +50,19 @@ public class Ledger {
         }
 
         this.amount = newAmount;
+    }
+
+    public void updateDay(Integer day) {
+        this.day = day;
+    }
+
+    public void updateSubCategory(SubCategory subCategory) {
+        if (subCategory == null) {
+            throw new NullPointerException();
+        }
+
+        this.subCategory = subCategory;
+        this.category = subCategory.getCategory();
     }
 
     public Ledger(Long amount, String memo, Category category, SubCategory subCategory, Integer year, Integer month, Integer day) {

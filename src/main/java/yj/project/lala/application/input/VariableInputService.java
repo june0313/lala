@@ -2,6 +2,7 @@ package yj.project.lala.application.input;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import yj.project.lala.application.ledger.LedgerView;
 import yj.project.lala.domain.category.CategoryGroup;
 import yj.project.lala.domain.category.CategoryRepository;
 import yj.project.lala.domain.ledger.LedgerQueryRepository;
@@ -14,7 +15,7 @@ public class VariableInputService {
     private final CategoryRepository categoryRepository;
     private final LedgerQueryRepository ledgerQueryRepository;
 
-    public List<VariableInput> findVariableLedgers(int year, int month) {
+    public List<LedgerView> findVariableLedgers(int year, int month) {
         var expensesCategories = categoryRepository.findAllByCategoryGroup(CategoryGroup.EXPENSES);
 
         var variableSubCategories = expensesCategories.stream()
@@ -25,14 +26,16 @@ public class VariableInputService {
         var variableLedgers = ledgerQueryRepository.findWithSubCategories(year, month, variableSubCategories);
 
         return variableLedgers.stream()
-                .map(ledger -> new VariableInput(
+                .map(ledger -> new LedgerView(
                         ledger.getId(),
+                        ledger.getAmount(),
+                        ledger.getMemo(),
                         ledger.getCategory().getId(),
                         ledger.getCategory().getName(),
                         ledger.getSubCategory().getId(),
                         ledger.getSubCategory().getName(),
-                        ledger.getMemo(),
-                        ledger.getAmount(),
+                        ledger.getYear(),
+                        ledger.getMonth(),
                         ledger.getDay(),
                         "default pay method"
                 ))

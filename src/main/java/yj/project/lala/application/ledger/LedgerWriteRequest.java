@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LedgerWriteRequest {
-    private Long ledgerId;
+    private Long id;
     private Long amount;
     private String memo;
     private Long categoryId;

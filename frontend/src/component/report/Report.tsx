@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useEffect} from 'react';
 import Box from "@mui/material/Box";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import Ledger from "../../model/Ledger";
+import {Ledger} from "../../api/LedgerApi";
 
 interface ReportProps {
     rows: Ledger[]
