@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class SubCategoryAmount {
+public class SubCategorySummary {
     private String subCategoryName;
     private Long amount;
 }

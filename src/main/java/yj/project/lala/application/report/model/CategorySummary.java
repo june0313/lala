@@ -11,11 +11,11 @@ import java.util.List;
 public class CategorySummary {
     private CategoryGroup categoryGroup;
     private String categoryName;
-    private List<SubCategoryAmount> subCategoryAmounts;
+    private List<SubCategorySummary> subCategorySummaries;
 
     public Long getTotalAmount() {
-        return subCategoryAmounts.stream()
-                .mapToLong(SubCategoryAmount::getAmount)
+        return subCategorySummaries.stream()
+                .mapToLong(SubCategorySummary::getAmount)
                 .sum();
     }
 }

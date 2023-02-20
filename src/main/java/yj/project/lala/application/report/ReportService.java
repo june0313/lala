@@ -3,7 +3,7 @@ package yj.project.lala.application.report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import yj.project.lala.application.report.model.CategorySummary;
-import yj.project.lala.application.report.model.SubCategoryAmount;
+import yj.project.lala.application.report.model.SubCategorySummary;
 import yj.project.lala.domain.category.Category;
 import yj.project.lala.domain.ledger.Ledger;
 import yj.project.lala.domain.ledger.LedgerQueryRepository;
@@ -41,17 +41,17 @@ public class ReportService {
         return CategorySummary.builder()
                 .categoryGroup(category.getCategoryGroup())
                 .categoryName(category.getName())
-                .subCategoryAmounts(toSubCategorySummary(ledgerGroup))
+                .subCategorySummaries(toSubCategorySummaries(ledgerGroup))
                 .build();
     }
 
-    private List<SubCategoryAmount> toSubCategorySummary(List<Ledger> ledgerGroup) {
+    private List<SubCategorySummary> toSubCategorySummaries(List<Ledger> ledgerGroup) {
         Map<SubCategory, Long> subCategoryAmountSummary = ledgerGroup.stream()
                 .collect(groupingBy(Ledger::getSubCategory, summingLong(Ledger::getAmount)));
 
         return subCategoryAmountSummary
                 .entrySet().stream()
-                .map(entry -> SubCategoryAmount.builder()
+                .map(entry -> SubCategorySummary.builder()
                         .subCategoryName(entry.getKey().getName())
                         .amount(entry.getValue())
                         .build())
