@@ -4,27 +4,20 @@ import Report from "../report/Report";
 import React, {useEffect, useState} from "react";
 import {DatePicker} from "@mui/x-date-pickers";
 import moment, {Moment} from "moment";
-import axios from "axios";
 import VariableExpensesInput from "../input/VariableExpensesInput";
-import {Ledger} from "../../api/LedgerApi";
+import {CategorySummary, ReportApi} from "../../api/ReportApi";
 
 export default function Main() {
     const [currentMoment, setCurrentMoment] = React.useState<Moment>(moment());
-    const [rows, setRows] = useState<Ledger[]>([]);
+    const [rows, setRows] = useState<CategorySummary[]>([]);
 
     useEffect(() => {
         fetchRows()
     }, [currentMoment])
 
     function fetchRows() {
-        axios
-            .get("/api/v1/ledgers", {
-                params: {
-                    year: getCurrentYear(),
-                    month: getCurrentMonth()
-                }
-            })
-            .then(r => setRows(r.data))
+        ReportApi.findReport(getCurrentYear(), getCurrentMonth())
+            .then(r => setRows(r))
     }
 
     function getCurrentYear(): number {

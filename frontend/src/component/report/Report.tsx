@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import Box from "@mui/material/Box";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import {Ledger} from "../../api/LedgerApi";
+import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@mui/material";
+import {CategorySummary} from "../../api/ReportApi";
+import {StyledTableCell} from "../custom/Tables";
 
 interface ReportProps {
-    rows: Ledger[]
+    rows: CategorySummary[]
 }
 
 export default function Report(props: ReportProps) {
@@ -18,19 +19,24 @@ export default function Report(props: ReportProps) {
                 <Table size={'small'}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>대분류</TableCell>
-                            <TableCell>소분류</TableCell>
-                            <TableCell>금액</TableCell>
+                            <StyledTableCell>대분류</StyledTableCell>
+                            <StyledTableCell>소분류</StyledTableCell>
+                            <StyledTableCell>항목별 금액</StyledTableCell>
+                            <StyledTableCell>총 금액</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.rows.map(row => (
-                            <TableRow key={row.id}>
-                                <TableCell>{row.categoryName}</TableCell>
-                                <TableCell>{row.subCategoryName}</TableCell>
-                                <TableCell>{row.amount.toLocaleString()}</TableCell>
-                            </TableRow>
-                        ))}
+                        {props.rows.map(row =>
+                            row.subCategorySummaries.map((subRow, index) => (
+                                <TableRow key={index}>
+                                    {index === 0 ? <StyledTableCell
+                                        rowSpan={row.subCategorySummaries.length}>{row.categoryName}</StyledTableCell> : null}
+                                    <StyledTableCell>{subRow.subCategoryName}</StyledTableCell>
+                                    <StyledTableCell>{subRow.amount.toLocaleString()}</StyledTableCell>
+                                    {index === 0 ? <StyledTableCell
+                                        rowSpan={row.subCategorySummaries.length}>{row.totalAmount.toLocaleString()}</StyledTableCell> : null}
+                                </TableRow>
+                            )))}
                     </TableBody>
                 </Table>
 
