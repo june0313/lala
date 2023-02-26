@@ -30,24 +30,26 @@ export default function Main() {
 
     return (
         <Grid container spacing={1}>
+            <Grid item xs={12}>
+                <Paper sx={{
+                    p: 1
+                }}>
+                    <DatePicker
+                        views={['year', 'month']}
+                        value={currentMoment}
+                        openTo="month"
+                        inputFormat={"yyyy-MM"}
+                        onChange={(newValue) => {
+                            if (newValue !== null) {
+                                setCurrentMoment(newValue);
+                            }
+                        }}
+                        renderInput={(params) => <TextField {...params} size={"small"}/>}
+                    />
+                </Paper>
+            </Grid>
             <Grid item xs={6}>
                 <Stack spacing={1}>
-                    <Paper sx={{
-                        p: 1
-                    }}>
-                        <DatePicker
-                            views={['year', 'month']}
-                            value={currentMoment}
-                            openTo="month"
-                            inputFormat={"yyyy-MM"}
-                            onChange={(newValue) => {
-                                if (newValue !== null) {
-                                    setCurrentMoment(newValue);
-                                }
-                            }}
-                            renderInput={(params) => <TextField {...params} size={"small"}/>}
-                        />
-                    </Paper>
                     <FixedLedgerInput title="수입"
                                       api="/api/v1/input/income"
                                       year={getCurrentYear()}
