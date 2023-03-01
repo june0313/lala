@@ -6,6 +6,7 @@ import {DatePicker} from "@mui/x-date-pickers";
 import moment, {Moment} from "moment";
 import VariableExpensesInput from "../input/VariableExpensesInput";
 import {CategorySummary, ReportApi} from "../../api/ReportApi";
+import MonthlySummary from "../report/MonthlySummary";
 
 export default function Main() {
     const [currentMoment, setCurrentMoment] = React.useState<Moment>(moment());
@@ -80,7 +81,10 @@ export default function Main() {
             </Grid>
 
             <Grid item xs={6}>
-                <Report rows={rows}/>
+                <Stack spacing={1}>
+                    <MonthlySummary/>
+                    <Report rows={rows}/>
+                </Stack>
             </Grid>
         </Grid>
     )
