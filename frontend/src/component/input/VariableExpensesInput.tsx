@@ -25,6 +25,7 @@ import {Category, CategoryApi} from "../../api/CategoryApi";
 import {Ledger, LedgerApi} from "../../api/LedgerApi";
 
 interface VariableExpensesInputProps {
+    title: string
     year: number,
     month: number
 }
@@ -154,14 +155,14 @@ export default function VariableExpensesInput(props: VariableExpensesInputProps)
     return (
         <Box>
             <Typography variant="h6" mt={1} ml={1}>
-                변동 지출
+                {props.title}
             </Typography>
 
             <TableContainer component={Paper}>
                 <Table size={'small'}>
                     <TableHead>
                         <StyledTableHeaderRow>
-                            <StyledTableHeader width={"10%"}>지출일</StyledTableHeader>
+                            <StyledTableHeader width={"10%"}>날짜</StyledTableHeader>
                             <StyledTableHeader width={"15%"}>대분류</StyledTableHeader>
                             <StyledTableHeader width={"15%"}>소분류</StyledTableHeader>
                             <StyledTableHeader width={"20%"}>메모</StyledTableHeader>

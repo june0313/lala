@@ -7,14 +7,22 @@ import moment, {Moment} from "moment";
 import VariableExpensesInput from "../input/VariableExpensesInput";
 import {CategorySummary, ReportApi} from "../../api/ReportApi";
 import MonthlySummary from "../report/MonthlySummary";
+import {useNavigate, useLocation} from "react-router-dom";
+import qs from 'qs';
 
-export default function Main() {
-    const [currentMoment, setCurrentMoment] = React.useState<Moment>(moment());
+export default function AccountingBook() {
+    const location = useLocation();
+    const queryParams = qs.parse(location.search, {
+        ignoreQueryPrefix: true
+    });
+
     const [rows, setRows] = useState<CategorySummary[]>([]);
 
     useEffect(() => {
         fetchRows()
-    }, [currentMoment])
+    }, [location])
+
+    const navigate = useNavigate();
 
     function fetchRows() {
         ReportApi.findReport(getCurrentYear(), getCurrentMonth())
@@ -22,11 +30,15 @@ export default function Main() {
     }
 
     function getCurrentYear(): number {
-        return currentMoment.year();
+        return queryParams.year == undefined ? moment().year() : parseInt(queryParams.year as string);
     }
 
     function getCurrentMonth(): number {
-        return currentMoment.month() + 1;
+        return queryParams.month == undefined ? moment().month() + 1 : parseInt(queryParams.month as string);
+    }
+
+    function getCurrentMoment(): Moment {
+        return moment().year(getCurrentYear()).month(getCurrentMonth() - 1);
     }
 
     return (
@@ -37,12 +49,12 @@ export default function Main() {
                 }}>
                     <DatePicker
                         views={['year', 'month']}
-                        value={currentMoment}
+                        value={getCurrentMoment()}
                         openTo="month"
                         inputFormat={"yyyy-MM"}
                         onChange={(newValue) => {
                             if (newValue !== null) {
-                                setCurrentMoment(newValue);
+                                navigate(`/?year=${newValue.year()}&month=${newValue.month() + 1}`)
                             }
                         }}
                         renderInput={(params) => <TextField {...params} size={"small"}/>}
@@ -75,8 +87,10 @@ export default function Main() {
                                       month={getCurrentMonth()}
                                       onChange={() => fetchRows()}
                     />
-                    <VariableExpensesInput year={getCurrentYear()}
-                                           month={getCurrentMonth()}/>
+                    <VariableExpensesInput
+                        title='변동 지출'
+                        year={getCurrentYear()}
+                        month={getCurrentMonth()}/>
                 </Stack>
             </Grid>
 
