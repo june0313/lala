@@ -7,6 +7,7 @@ import yj.project.lala.domain.category.Category;
 import yj.project.lala.domain.subcategory.SubCategory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static yj.project.lala.domain.ledger.QLedger.ledger;
 
@@ -23,6 +24,16 @@ public class LedgerQueryRepository {
                         ledger.month.eq(month)
                 )
                 .fetch();
+    }
+
+    public Optional<Ledger> find(int year, int month, SubCategory fixedSubCategory) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(ledger)
+                .where(
+                        ledger.year.eq(year),
+                        ledger.month.eq(month),
+                        ledger.subCategory.eq(fixedSubCategory)
+                )
+                .fetchOne());
     }
 
     public List<Ledger> find(int year, int month, List<Category> categories) {

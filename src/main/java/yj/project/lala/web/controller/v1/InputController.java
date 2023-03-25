@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import yj.project.lala.application.input.FixedInputService;
+import yj.project.lala.application.input.InputService;
 import yj.project.lala.application.input.VariableInputService;
 import yj.project.lala.application.ledger.FixedExpensesLedgerService;
 import yj.project.lala.application.ledger.LedgerView;
@@ -17,23 +17,23 @@ import java.util.List;
 @RequestMapping("/api/v1/input")
 @RequiredArgsConstructor
 public class InputController {
-    private final FixedInputService fixedInputService;
+    private final InputService inputService;
     private final VariableInputService variableInputService;
     private final FixedExpensesLedgerService fixedExpensesLedgerService;
 
     @GetMapping("/income")
     public List<LedgerView> incomeInput(@RequestParam int year, @RequestParam int month) {
-        return fixedInputService.getInputs(year, month, CategoryGroup.INCOME);
+        return inputService.findLedgers(year, month, CategoryGroup.INCOME);
     }
 
     @GetMapping("/saving-investment")
     public List<LedgerView> savingInvestmentInput(@RequestParam int year, @RequestParam int month) {
-        return fixedInputService.getInputs(year, month, CategoryGroup.SAVING_INVESTMENT);
+        return inputService.findLedgers(year, month, CategoryGroup.SAVING_INVESTMENT);
     }
 
     @GetMapping("/pension")
     public List<LedgerView> pensionInput(@RequestParam int year, @RequestParam int month) {
-        return fixedInputService.getInputs(year, month, CategoryGroup.PENSION);
+        return inputService.findLedgers(year, month, CategoryGroup.PENSION);
     }
 
     @GetMapping("/expenses")
