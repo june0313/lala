@@ -14,7 +14,7 @@ interface FixedLedgerInputProps {
     onChange: () => void
 }
 
-export default function FixedLedgerInput(props: FixedLedgerInputProps) {
+export default function LedgerInput(props: FixedLedgerInputProps) {
     const [ledgers, setLedgers] = useState<Ledger[]>([])
     const [cache, setCache] = useState('');
 

@@ -1,5 +1,5 @@
 import {Grid, Paper, Stack, TextField} from "@mui/material";
-import FixedLedgerInput from "../input/FixedLedgerInput";
+import LedgerInput from "../input/LedgerInput";
 import Report from "../report/Report";
 import React, {useEffect, useState} from "react";
 import {DatePicker} from "@mui/x-date-pickers";
@@ -63,29 +63,29 @@ export default function AccountingBook() {
             </Grid>
             <Grid item xs={6}>
                 <Stack spacing={1}>
-                    <FixedLedgerInput title="수입"
-                                      api="/api/v1/input/income"
-                                      year={getCurrentYear()}
-                                      month={getCurrentMonth()}
-                                      onChange={() => fetchRows()}
+                    <LedgerInput title="수입"
+                                 api="/api/v1/input/income"
+                                 year={getCurrentYear()}
+                                 month={getCurrentMonth()}
+                                 onChange={() => fetchRows()}
                     />
-                    <FixedLedgerInput title="저축, 투자"
-                                      api="/api/v1/input/saving-investment"
-                                      year={getCurrentYear()}
-                                      month={getCurrentMonth()}
-                                      onChange={() => fetchRows()}
+                    <LedgerInput title="저축, 투자"
+                                 api="/api/v1/input/saving-investment"
+                                 year={getCurrentYear()}
+                                 month={getCurrentMonth()}
+                                 onChange={() => fetchRows()}
                     />
-                    <FixedLedgerInput title="연금, 노후"
-                                      api="/api/v1/input/pension"
-                                      year={getCurrentYear()}
-                                      month={getCurrentMonth()}
-                                      onChange={() => fetchRows()}
+                    <LedgerInput title="연금, 노후"
+                                 api="/api/v1/input/pension"
+                                 year={getCurrentYear()}
+                                 month={getCurrentMonth()}
+                                 onChange={() => fetchRows()}
                     />
-                    <FixedLedgerInput title="고정 지출"
-                                      api="/api/v1/input/expenses"
-                                      year={getCurrentYear()}
-                                      month={getCurrentMonth()}
-                                      onChange={() => fetchRows()}
+                    <LedgerInput title="고정 지출"
+                                 api="/api/v1/input/expenses"
+                                 year={getCurrentYear()}
+                                 month={getCurrentMonth()}
+                                 onChange={() => fetchRows()}
                     />
                     <VariableExpensesInput
                         title='변동 지출'
