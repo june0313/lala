@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import yj.project.lala.application.input.InputService;
-import yj.project.lala.application.input.VariableInputService;
-import yj.project.lala.application.ledger.FixedExpensesLedgerService;
 import yj.project.lala.application.ledger.LedgerView;
 import yj.project.lala.domain.category.CategoryType;
 
@@ -18,8 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InputController {
     private final InputService inputService;
-    private final VariableInputService variableInputService;
-    private final FixedExpensesLedgerService fixedExpensesLedgerService;
 
     @GetMapping("/income")
     public List<LedgerView> incomeInput(@RequestParam int year, @RequestParam int month) {
@@ -38,11 +34,6 @@ public class InputController {
 
     @GetMapping("/expenses")
     public List<LedgerView> expensesInput(@RequestParam int year, @RequestParam int month) {
-        return fixedExpensesLedgerService.findAll(year, month);
-    }
-
-    @GetMapping("/variable")
-    public List<LedgerView> findAllVariableLedgers(@RequestParam int year, @RequestParam int month) {
-        return variableInputService.findVariableLedgers(year, month);
+        return inputService.findLedgers(year, month, CategoryType.EXPENSES);
     }
 }
