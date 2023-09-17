@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Box from "@mui/material/Box";
 import {
-    Button,
     InputBase, Modal,
     Paper, Stack,
     Table,
@@ -11,7 +10,6 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 import {StyledTableCell, StyledTableHeader, StyledTableHeaderRow} from '../custom/Tables';
 import {Ledger, LedgerApi} from "../../api/LedgerApi";
@@ -74,10 +72,6 @@ export default function LedgerInput(props: FixedLedgerInputProps) {
         setCache(JSON.stringify(ledger))
     }
 
-    function openModal() {
-        setModelOpen(true);
-    }
-
     function closeModal() {
         setModelOpen(false);
     }
@@ -121,10 +115,6 @@ export default function LedgerInput(props: FixedLedgerInputProps) {
                 <Typography variant="h6" mt={1} ml={1}>
                     {props.title}
                 </Typography>
-
-                <Box textAlign="right">
-                    <Button variant="contained" size="small" startIcon={<AddIcon />} onClick={openModal}>추가</Button>
-                </Box>
 
                 <TableContainer component={Paper}>
                     <Table>

@@ -4,7 +4,6 @@ import Report from "../report/Report";
 import React, {useEffect, useState} from "react";
 import {DatePicker} from "@mui/x-date-pickers";
 import moment, {Moment} from "moment";
-import VariableExpensesInput from "../input/VariableExpensesInput";
 import {CategorySummary, ReportApi} from "../../api/ReportApi";
 import MonthlySummary from "../report/MonthlySummary";
 import {useNavigate, useLocation} from "react-router-dom";
@@ -69,28 +68,25 @@ export default function AccountingBook() {
                                  month={getCurrentMonth()}
                                  onChange={() => fetchRows()}
                     />
-                    <LedgerInput title="저축, 투자"
-                                 api="/api/v1/input/saving-investment"
+                    <LedgerInput title="저축"
+                                 api="/api/v1/input/saving"
                                  year={getCurrentYear()}
                                  month={getCurrentMonth()}
                                  onChange={() => fetchRows()}
                     />
-                    <LedgerInput title="연금, 노후"
-                                 api="/api/v1/input/pension"
+                    <LedgerInput title="투자"
+                                 api="/api/v1/input/investment"
                                  year={getCurrentYear()}
                                  month={getCurrentMonth()}
                                  onChange={() => fetchRows()}
                     />
-                    <LedgerInput title="고정 지출"
+                    <LedgerInput title="지출"
                                  api="/api/v1/input/expenses"
                                  year={getCurrentYear()}
                                  month={getCurrentMonth()}
                                  onChange={() => fetchRows()}
                     />
-                    <VariableExpensesInput
-                        title='변동 지출'
-                        year={getCurrentYear()}
-                        month={getCurrentMonth()}/>
+
                 </Stack>
             </Grid>
 

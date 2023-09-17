@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CategoryType {
     INCOME("수입"),
-    SAVING_INVESTMENT("저축, 투자"),
-    PENSION("연금, 노후"),
+    SAVING("저축"),
+    INVESTMENT("투자"),
     EXPENSES("지출"),
     ;
 

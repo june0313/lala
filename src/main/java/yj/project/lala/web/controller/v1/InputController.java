@@ -26,14 +26,14 @@ public class InputController {
         return inputService.findLedgers(year, month, CategoryType.INCOME);
     }
 
-    @GetMapping("/saving-investment")
+    @GetMapping("/saving")
     public List<LedgerView> savingInvestmentInput(@RequestParam int year, @RequestParam int month) {
-        return inputService.findLedgers(year, month, CategoryType.SAVING_INVESTMENT);
+        return inputService.findLedgers(year, month, CategoryType.SAVING);
     }
 
-    @GetMapping("/pension")
+    @GetMapping("/investment")
     public List<LedgerView> pensionInput(@RequestParam int year, @RequestParam int month) {
-        return inputService.findLedgers(year, month, CategoryType.PENSION);
+        return inputService.findLedgers(year, month, CategoryType.INVESTMENT);
     }
 
     @GetMapping("/expenses")

@@ -38,12 +38,12 @@ function CategoryManagement() {
             categoryType: "INCOME"
         },
         {
-            tabName: "저축, 투자",
-            categoryType: "SAVING_INVESTMENT"
+            tabName: "저축",
+            categoryType: "SAVING"
         },
         {
-            tabName: "연금, 노후",
-            categoryType: "PENSION"
+            tabName: "투자",
+            categoryType: "INVESTMENT"
         },
         {
             tabName: "지출",
