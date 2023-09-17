@@ -2,7 +2,7 @@ import axios from "axios";
 
 export interface Category {
     categoryId: number
-    group: string
+    categoryType: string
     name: string
     subCategories: SubCategory[]
 }
@@ -27,10 +27,10 @@ export class CategoryApi {
         return response.data;
     }
 
-    static async addCategory(name: string, group: string): Promise<number> {
+    static async addCategory(name: string, categoryType: string): Promise<number> {
         const response = await axios.post<number>(CATEGORY_API_PATH, {
             name: name,
-            categoryGroup: group
+            categoryType: categoryType
         });
 
         return response.data;

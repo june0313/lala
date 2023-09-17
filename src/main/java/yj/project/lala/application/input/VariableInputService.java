@@ -3,7 +3,7 @@ package yj.project.lala.application.input;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import yj.project.lala.application.ledger.LedgerView;
-import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryType;
 import yj.project.lala.domain.category.CategoryRepository;
 import yj.project.lala.domain.ledger.LedgerQueryRepository;
 
@@ -16,7 +16,7 @@ public class VariableInputService {
     private final LedgerQueryRepository ledgerQueryRepository;
 
     public List<LedgerView> findVariableLedgers(int year, int month) {
-        var expensesCategories = categoryRepository.findAllByCategoryGroup(CategoryGroup.EXPENSES);
+        var expensesCategories = categoryRepository.findAllByCategoryType(CategoryType.EXPENSES);
 
         var variableSubCategories = expensesCategories.stream()
                 .flatMap(category -> category.getSubCategories().stream())

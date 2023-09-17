@@ -19,7 +19,7 @@ public class CategoryQueryRepository {
                 .join(category.subCategories, subCategory)
                 .fetchJoin()
                 .where(
-                        category.categoryGroup.eq(CategoryGroup.EXPENSES),
+                        category.categoryType.eq(CategoryType.EXPENSES),
                         subCategory.fixed.eq(false)
                 )
                 .fetch();

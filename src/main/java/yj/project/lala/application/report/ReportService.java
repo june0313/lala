@@ -30,7 +30,7 @@ public class ReportService {
 
         return ledgersByCategory.entrySet().stream()
                 .map(this::toCategorySummary)
-                .sorted(Comparator.comparingInt(report -> report.getCategoryGroup().ordinal()))
+                .sorted(Comparator.comparingInt(report -> report.getCategoryType().ordinal()))
                 .toList();
     }
 
@@ -39,7 +39,7 @@ public class ReportService {
         var ledgerGroup = entry.getValue();
 
         return CategorySummary.builder()
-                .categoryGroup(category.getCategoryGroup())
+                .categoryType(category.getCategoryType())
                 .categoryName(category.getName())
                 .subCategorySummaries(toSubCategorySummaries(ledgerGroup))
                 .build();

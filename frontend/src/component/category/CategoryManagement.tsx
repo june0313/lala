@@ -35,19 +35,19 @@ function CategoryManagement() {
     const tabData = [
         {
             tabName: "수입",
-            categoryGroup: "INCOME"
+            categoryType: "INCOME"
         },
         {
             tabName: "저축, 투자",
-            categoryGroup: "SAVING_INVESTMENT"
+            categoryType: "SAVING_INVESTMENT"
         },
         {
             tabName: "연금, 노후",
-            categoryGroup: "PENSION"
+            categoryType: "PENSION"
         },
         {
             tabName: "지출",
-            categoryGroup: "EXPENSES"
+            categoryType: "EXPENSES"
         }
     ];
 
@@ -56,13 +56,13 @@ function CategoryManagement() {
             .then(categories => setCategories(categories))
     }, [])
 
-    function addCategory(name: string, group: string) {
+    function addCategory(name: string, categoryType: string) {
         if (name.length === 0) {
             setNewCategoryNameError(newCategoryName.length === 0)
             return;
         }
 
-        CategoryApi.addCategory(name, group)
+        CategoryApi.addCategory(name, categoryType)
             .then(() => CategoryApi.getAllCategories())
             .then(categories => setCategories(categories))
             .catch(error => {
@@ -138,7 +138,7 @@ function CategoryManagement() {
                     <Button size={"small"}
                             startIcon={<AddCircle/>}
                             variant={"contained"}
-                            onClick={() => addCategory(newCategoryName, tabData[currentTabIndex].categoryGroup)}
+                            onClick={() => addCategory(newCategoryName, tabData[currentTabIndex].categoryType)}
                     >
                         추가
                     </Button>
@@ -152,7 +152,7 @@ function CategoryManagement() {
                         mb: 1
                     }}>
                         {categories
-                            .filter(category => category.group === tabData[currentTabIndex].categoryGroup)
+                            .filter(category => category.categoryType === tabData[currentTabIndex].categoryType)
                             .map(category => (
                                     <Box
                                         key={category.categoryId}

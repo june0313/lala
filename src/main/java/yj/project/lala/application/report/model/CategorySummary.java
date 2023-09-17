@@ -2,14 +2,14 @@ package yj.project.lala.application.report.model;
 
 import lombok.Builder;
 import lombok.Getter;
-import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryType;
 
 import java.util.List;
 
 @Getter
 @Builder
 public class CategorySummary {
-    private CategoryGroup categoryGroup;
+    private CategoryType categoryType;
     private String categoryName;
     private List<SubCategorySummary> subCategorySummaries;
 

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import yj.project.lala.application.category.CategoryAddRequest;
 import yj.project.lala.application.category.CategoryService;
 import yj.project.lala.application.category.CategoryView;
-import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryType;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class CategoryController {
 
     @GetMapping("/income")
     public List<CategoryView> findIncomeCategories() {
-        return categoryService.findByGroup(CategoryGroup.INCOME);
+        return categoryService.findByGroup(CategoryType.INCOME);
     }
 
     @GetMapping("/expenses")

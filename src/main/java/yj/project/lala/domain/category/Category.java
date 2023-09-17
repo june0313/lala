@@ -16,9 +16,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "category_group")
+    @Column(name = "category_type")
     @Enumerated(value = EnumType.STRING)
-    private CategoryGroup categoryGroup;
+    private CategoryType categoryType;
 
     @Column(name = "name")
     private String name;
@@ -26,8 +26,8 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<SubCategory> subCategories;
 
-    public Category(CategoryGroup categoryGroup, String name) {
-        this.categoryGroup = categoryGroup;
+    public Category(CategoryType categoryType, String name) {
+        this.categoryType = categoryType;
         this.name = name;
     }
 }

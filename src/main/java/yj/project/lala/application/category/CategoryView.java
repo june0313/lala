@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class CategoryView {
     private Long categoryId;
-    private String group;
+    private String categoryType;
     private String name;
     private List<SubCategoryView> subCategories;
 }

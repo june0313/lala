@@ -5,11 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yj.project.lala.domain.category.Category;
-import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryType;
 import yj.project.lala.domain.category.CategoryQueryRepository;
 import yj.project.lala.domain.category.CategoryRepository;
-import yj.project.lala.domain.subcategory.SubCategory;
-import yj.project.lala.domain.subcategory.SubCategoryRepository;
 
 import java.util.List;
 
@@ -28,8 +26,8 @@ public class CategoryService {
 
     }
 
-    public List<CategoryView> findByGroup(CategoryGroup group) {
-        return categoryRepository.findAllByCategoryGroup(group).stream()
+    public List<CategoryView> findByGroup(CategoryType group) {
+        return categoryRepository.findAllByCategoryType(group).stream()
                 .filter(category -> !category.getSubCategories().isEmpty())
                 .map(CategoryFunctions.toView)
                 .toList();
@@ -49,7 +47,7 @@ public class CategoryService {
             throw new IllegalStateException(category.getName() + " 대분류가 이미 존재합니다.");
         });
 
-        Category newCategory = new Category(CategoryGroup.valueOf(request.getCategoryGroup()), refinedCategoryName);
+        Category newCategory = new Category(CategoryType.valueOf(request.getCategoryType()), refinedCategoryName);
         categoryRepository.save(newCategory);
 
         return newCategory.getId();

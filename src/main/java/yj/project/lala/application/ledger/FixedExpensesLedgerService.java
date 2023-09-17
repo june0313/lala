@@ -2,7 +2,7 @@ package yj.project.lala.application.ledger;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryType;
 import yj.project.lala.domain.category.CategoryRepository;
 import yj.project.lala.domain.ledger.Ledger;
 import yj.project.lala.domain.ledger.LedgerQueryRepository;
@@ -18,7 +18,7 @@ public class FixedExpensesLedgerService {
     private final LedgerQueryRepository ledgerQueryRepository;
 
     public List<LedgerView> findAll(int year, int month) {
-        var expensesCategories = categoryRepository.findAllByCategoryGroup(CategoryGroup.EXPENSES);
+        var expensesCategories = categoryRepository.findAllByCategoryType(CategoryType.EXPENSES);
 
         var fixedExpensesSubCategories = expensesCategories.stream()
                 .flatMap(category -> category.getSubCategories().stream())

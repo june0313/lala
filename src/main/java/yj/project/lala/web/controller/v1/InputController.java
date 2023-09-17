@@ -9,7 +9,7 @@ import yj.project.lala.application.input.InputService;
 import yj.project.lala.application.input.VariableInputService;
 import yj.project.lala.application.ledger.FixedExpensesLedgerService;
 import yj.project.lala.application.ledger.LedgerView;
-import yj.project.lala.domain.category.CategoryGroup;
+import yj.project.lala.domain.category.CategoryType;
 
 import java.util.List;
 
@@ -23,17 +23,17 @@ public class InputController {
 
     @GetMapping("/income")
     public List<LedgerView> incomeInput(@RequestParam int year, @RequestParam int month) {
-        return inputService.findLedgers(year, month, CategoryGroup.INCOME);
+        return inputService.findLedgers(year, month, CategoryType.INCOME);
     }
 
     @GetMapping("/saving-investment")
     public List<LedgerView> savingInvestmentInput(@RequestParam int year, @RequestParam int month) {
-        return inputService.findLedgers(year, month, CategoryGroup.SAVING_INVESTMENT);
+        return inputService.findLedgers(year, month, CategoryType.SAVING_INVESTMENT);
     }
 
     @GetMapping("/pension")
     public List<LedgerView> pensionInput(@RequestParam int year, @RequestParam int month) {
-        return inputService.findLedgers(year, month, CategoryGroup.PENSION);
+        return inputService.findLedgers(year, month, CategoryType.PENSION);
     }
 
     @GetMapping("/expenses")
