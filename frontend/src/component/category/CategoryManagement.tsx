@@ -19,18 +19,23 @@ import {
     Tabs
 } from "@mui/material";
 import {AddCircle, PushPin, RemoveCircle} from "@mui/icons-material";
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function CategoryManagement() {
-    const [categories, setCategories] = useState<Category[]>([])
-    const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [searchParams] = useSearchParams()
 
+    const [categories, setCategories] = useState<Category[]>([])
+
+    const [currentTab, setCurrentTab] = useState(searchParams.get("categoryType") || "INCOME")
     const [newCategoryName, setNewCategoryName] = useState('');
+
     const [newCategoryNameError, setNewCategoryNameError] = useState(false);
 
     const [newSubCategoryName, setNewSubCategoryName] = useState(new Map());
-
     const [snackBarOpen, setSnackBarOpen] = useState(false);
+
     const [snackBarMessage, setSnackBarMessage] = useState('');
+    const navigate = useNavigate();
 
     const tabData = [
         {
@@ -96,10 +101,12 @@ function CategoryManagement() {
             .then(categories => setCategories(categories))
     }
 
-    const onChangeTab = (event: React.SyntheticEvent, tabIndex: number) => {
-        setCurrentTabIndex(tabIndex);
+    const onChangeTab = (event: React.SyntheticEvent, selectedTab: string) => {
+        setCurrentTab(selectedTab);
         setNewCategoryName('');
         setNewCategoryNameError(false);
+
+        navigate(`?categoryType=${selectedTab}`)
     };
 
     const onChangeNewCategoryName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,8 +122,10 @@ function CategoryManagement() {
 
     return (
         <div>
-            <Tabs value={currentTabIndex} onChange={onChangeTab} textColor="secondary" indicatorColor="secondary">
-                {tabData.map((t, i) => <Tab key={i} label={t.tabName}></Tab>)}
+            <Tabs value={currentTab} onChange={onChangeTab} textColor="secondary" indicatorColor="secondary">
+                {tabData.map((t, i) =>
+                    <Tab key={i} value={t.categoryType} label={t.tabName}></Tab>
+                )}
             </Tabs>
 
             <Box
@@ -138,7 +147,7 @@ function CategoryManagement() {
                     <Button size={"small"}
                             startIcon={<AddCircle/>}
                             variant={"contained"}
-                            onClick={() => addCategory(newCategoryName, tabData[currentTabIndex].categoryType)}
+                            onClick={() => addCategory(newCategoryName, currentTab)}
                     >
                         추가
                     </Button>
@@ -152,13 +161,13 @@ function CategoryManagement() {
                         mb: 1
                     }}>
                         {categories
-                            .filter(category => category.categoryType === tabData[currentTabIndex].categoryType)
+                            .filter(category => category.categoryType === currentTab)
                             .map(category => (
                                     <Box
                                         key={category.categoryId}
                                         sx={{
-                                        flexGrow: 0
-                                    }}>
+                                            flexGrow: 0
+                                        }}>
                                         <TableContainer component={Paper} elevation={1}>
                                             <Table size={"small"}>
                                                 <TableHead>
